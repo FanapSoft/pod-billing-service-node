@@ -1,32 +1,17 @@
-const PodBillingService = require('../lib/main');
+const PodBillingService = require('pod-billing-service');
 
 // Variable Declaration & Initialization
-let podBillingService = new PodBillingService({
-  apiToken: 'API TOKEN'
+let podBilling = new PodBillingService({
+  apiToken: 'API TOKEN' // Required
+  // tokenIssuer: 0 | 1 - Optional
 });
 
 // *****************************************************************
 // #1
-// function: getOtt
-let getOttData = {
-  // ------ REQUIRED ------
-  // ------ OPTIONAL ------
-};
-
-podBillingService.getOtt(getOttData)
-  .then(function (result) {
-    console.log('function: getOtt ============>', result, '\n');
-  })
-  .catch(function (error) {
-    console.log('error getOtt ============>', error);
-  });
-
-// *****************************************************************
-// #2
 // function: issueInvoice
 let issueInvoiceData = {
   // ------ REQUIRED ------
-  _ott_: 'OTT', // get the ott from getOtt API
+  ott: 'OTT',
   productList: [
     { productId: 0, price: 0, quantity: 0, productDescription: 'DESCRIPTION' },
     { productId: 0, price: 0, quantity: 0, productDescription: 'DESCRIPTION' }
@@ -40,23 +25,27 @@ let issueInvoiceData = {
   // description: 'DESCRIPTION'
   // deadline: 'DEADLINE'
   // currencyCode: 'CURRENCY CODE'
-  // addressId: ADDRESS ID
+  // addressId: 0
   // voucherHash: 'VOUCHER HASH'
-  // preferredTaxRate: TAX RATE
+  // preferredTaxRate: 0
   // verificationNeeded: true | false
   // verifyAfterTimeout: true | false
   // preview: true | false
   // metadata: OBJECT
-  // safe: 'SAFE'
+  // safe: true | false
   // postVoucherEnabled: 'POST VOUCHER ENABLED'
   // hasEvent: 'HAS EVENT'
   // eventTitle: 'EVENT TITLE'
   // eventTimeZone: 'TIME ZONE'
-  // eventReminders: ARRAY OF OBJECTS
+  // eventReminders: [{},{}] // Array of objects
   // eventDescription: 'DESCRIPTION'
   // eventMetadat: OBJECT
+  // scVoucherHash: ['HASH#1', 'HASH#2']
+  // token: 'API TOKEN'
+  // tokenIssuer: 0 | 1
+  // scApiKey: ' SC API KEY'
 };
-podBillingService.issueInvoice(issueInvoiceData)
+podBilling.issueInvoice(issueInvoiceData)
   .then(function (result) {
     console.log('function: issueInvoice ============>', result, '\n');
   })
@@ -65,11 +54,11 @@ podBillingService.issueInvoice(issueInvoiceData)
   });
 
 // *****************************************************************
-// #3
+// #2
 // function: createPreInvoice
 let createPreInvoiceData = {
   // ------ REQUIRED ------
-  _ott_: 'OTT',
+  ott: 'OTT',
   productList: [
     { productId: 0, price: 0, quantity: 0, productDescription: 'My first product!' },
     { productId: 0, price: 0, quantity: 0, productDescription: 'My Second Product!' }
@@ -84,11 +73,15 @@ let createPreInvoiceData = {
   // description: 'DESCRIPTION'
   // deadline: 'DEADLINE'
   // currencyCode: 'CURRENCY CODE'
-  // addressId: ADDRESS ID
-  // preferredTaxRate: TAX RATE
+  // addressId: 0
+  // preferredTaxRate: 0
   // verificationNeeded: true | false
+  // scVoucherHash: ['HASH#1', 'HASH#2']
+  // token: 'API TOKEN'
+  // tokenIssuer: 0 | 1
+  // scApiKey: ' SC API KEY'
 };
-podBillingService.createPreInvoice(createPreInvoiceData)
+podBilling.createPreInvoice(createPreInvoiceData)
   .then(function (result) {
     console.log('function: createPreInvoice ============>', result, '\n');
   })
@@ -97,35 +90,39 @@ podBillingService.createPreInvoice(createPreInvoiceData)
   });
 
 // *****************************************************************
-// #4
+// #3
 // function: getInvoiceList
 let getInvoiceListData = {
   // ------ REQUIRED ------
   offset: 0
 
   // ------ OPTIONAL ------
-  // size: SIZE
-  // id: ID
+  // size: 0
+  // id: 0
   // billNumber: 'BILL NUMBER'
   // uniqueNumber: 'UNIQUE NUMBER'
-  // trackerId: ID
-  // fromDate: 'FROM DATE'
-  // toDate: 'TO DATE'
+  // trackerId: 0
+  // fromDate: 'YYYY/MM/DD | Date Object'
+  // toDate: 'YYYY/MM/DD | Date Object'
   // isCanceled: true | false
   // isPayed: true | false
   // isClosed: true | false
   // isWaiting: true | false
   // guildCode: 'GUILD CODE'
   // referenceNumber: 'REFERENCE NUMBER'
-  // userId: ID
-  // issuerId: ID
+  // userId: 0
+  // issuerId: 0
   // query: 'QUERY'
-  // firstId: ID
-  // lastId: ID
-  // productIdList: ARRAY OF INTEGERS
+  // firstId: 0
+  // lastId: 0
+  // productIdList: [0, 0] // Array of integers
+  // scVoucherHash: ['HASH#1', 'HASH#2']
+  // token: 'API TOKEN'
+  // tokenIssuer: 0 | 1
+  // scApiKey: ' SC API KEY'
 };
 
-podBillingService.getInvoiceList(getInvoiceListData)
+podBilling.getInvoiceList(getInvoiceListData)
   .then(function (result) {
     console.log('function: getInvoiceList ============>', result, '\n');
   })
@@ -134,16 +131,20 @@ podBillingService.getInvoiceList(getInvoiceListData)
   });
 
 // *****************************************************************
-// #5
+// #4
 // function: payInvoice
 let payInvoiceData = {
   // ------ REQUIRED ------
   invoiceId: 0
 
   // ------ OPTIONAL ------
+  // scVoucherHash: ['HASH#1', 'HASH#2']
+  // token: 'API TOKEN'
+  // tokenIssuer: 0 | 1
+  // scApiKey: ' SC API KEY'
 };
 
-podBillingService.payInvoice(payInvoiceData)
+podBilling.payInvoice(payInvoiceData)
   .then(function (result) {
     console.log('function: payInvoice ============>', result, '\n');
   })
@@ -152,7 +153,7 @@ podBillingService.payInvoice(payInvoiceData)
   });
 
 // *****************************************************************
-// #6
+// #5
 // function: sendInvoicePaymentSMS
 let sendInvoicePaymentSMSData = {
   // ------ REQUIRED ------
@@ -162,11 +163,15 @@ let sendInvoicePaymentSMSData = {
   // wallet: 'WALLET NAME'
   // callbackUri: 'CALLBACK URI'
   // redirectUri: 'REDIRECT URI'
-  // delegationId: ARRAY OF INTEGERS
-  // forceDeligation: 'FORCE DELIGATION'
+  // delegationId: [0, 0] // Array of Integers
+  // forceDeligation: true | false
+  // scVoucherHash: ['HASH#1', 'HASH#2']
+  // token: 'API TOKEN'
+  // tokenIssuer: 0 | 1
+  // scApiKey: ' SC API KEY'
 };
 
-podBillingService.sendInvoicePaymentSMS(sendInvoicePaymentSMSData)
+podBilling.sendInvoicePaymentSMS(sendInvoicePaymentSMSData)
   .then(function (result) {
     console.log('function: sendInvoicePaymentSMS ============>', result, '\n');
   })
@@ -175,20 +180,24 @@ podBillingService.sendInvoicePaymentSMS(sendInvoicePaymentSMSData)
   });
 
 // *****************************************************************
-// #7
+// #6
 // function: getInvoiceListByMetadata
 let getInvoiceListByMetadataData = {
   // ------ REQUIRED ------
 
   // ------ OPTIONAL ------
-  // metaQuery: OBJECT
-  // offset: OFFSET
-  // size: SIZE
+  // metaQuery: {} // Object
+  // offset: 0
+  // size: 0
   // isPayed: true | false
   // isCancelled: true | false
+  // scVoucherHash: ['HASH#1', 'HASH#2']
+  // token: 'API TOKEN'
+  // tokenIssuer: 0 | 1
+  // scApiKey: ' SC API KEY'
 };
 
-podBillingService.getInvoiceListByMetadata(getInvoiceListByMetadataData)
+podBilling.getInvoiceListByMetadata(getInvoiceListByMetadataData)
   .then(function (result) {
     console.log('function: getInvoiceListByMetadata ============>', result, '\n');
   })
@@ -197,20 +206,20 @@ podBillingService.getInvoiceListByMetadata(getInvoiceListByMetadataData)
   });
 
 // *****************************************************************
-// #8
+// #7
 // function: getInvoiceListAsFile
 
 let getInvoiceListAsFileData = {
   // ------ REQUIRED (One of these fields is required) ------
   lastNRows: 0,
-  fromDate: 'YYYY/MM/DD HH:MM:SS', // or 'YYYY/MM/DD'
-  toDate: 'YYYY/MM/DD HH:MM:SS' // or 'YYYY/MM/DD'
+  fromDate: 'YYYY/MM/DD HH:MM:SS | YYYY/MM/DD | Date Object',
+  toDate: 'YYYY/MM/DD HH:MM:SS | YYYY/MM/DD | Date Object'
 
   // ------ OPTIONAL ------
   // id: ID
   // billNumber: 'BILL NUMBER'
   // uniqueNumber: 'UNIQUE NUMBER'
-  // trackerId: ID
+  // trackerId: 0
   // isCancelled: true | false
   // isPayed: true | false
   // isClosed: true | false
@@ -218,11 +227,15 @@ let getInvoiceListAsFileData = {
   // guildCode: 'GUILD CODE'
   // referenceNumber: 'REFERENCE NUMBER'
   // query: 'QUERY'
-  // productIdList: ARRAY OF INTEGERS
+  // productIdList: [0, 0] Array of Integers
   // callbackUrl: 'CALL BACK URL'
+  // scVoucherHash: ['HASH#1', 'HASH#2']
+  // token: 'API TOKEN'
+  // tokenIssuer: 0 | 1
+  // scApiKey: ' SC API KEY'
 };
 
-podBillingService.getInvoiceListAsFile(getInvoiceListAsFileData)
+podBilling.getInvoiceListAsFile(getInvoiceListAsFileData)
   .then(function (result) {
     console.log('function: getInvoiceListAsFile ============>', result, '\n');
   })
@@ -231,7 +244,7 @@ podBillingService.getInvoiceListAsFile(getInvoiceListAsFileData)
   });
 
 // *****************************************************************
-// #9
+// #8
 // function: verifyInvoice
 // set the verificationNeeded to true when you are creating an invoice, then pay the invoice and call the verifyInvoice
 
@@ -241,8 +254,12 @@ let verifyInvoiceData = {
   billNumber: 'BILLNUMBER'
 
   // ------ OPTIONAL ------
+  // scVoucherHash: ['HASH#1', 'HASH#2']
+  // token: 'API TOKEN'
+  // tokenIssuer: 0 | 1
+  // scApiKey: ' SC API KEY'
 };
-podBillingService.verifyInvoice(verifyInvoiceData)
+podBilling.verifyInvoice(verifyInvoiceData)
   .then(function (result) {
     console.log('function: verifyInvoice ============>', result, '\n');
   })
@@ -251,7 +268,7 @@ podBillingService.verifyInvoice(verifyInvoiceData)
   });
 
 // *****************************************************************
-// # 10
+// #9
 // function: cancelInvoice
 
 let cancelInvoiceData = {
@@ -259,8 +276,12 @@ let cancelInvoiceData = {
   id: 0 // Invoice ID
 
   // ------ OPTIONAL ------
+  // scVoucherHash: ['HASH#1', 'HASH#2']
+  // token: 'API TOKEN'
+  // tokenIssuer: 0 | 1
+  // scApiKey: ' SC API KEY'
 };
-podBillingService.cancelInvoice(cancelInvoiceData)
+podBilling.cancelInvoice(cancelInvoiceData)
   .then(function (result) {
     console.log('function: cancelInvoice ============>', result, '\n');
   })
@@ -269,7 +290,7 @@ podBillingService.cancelInvoice(cancelInvoiceData)
   });
 
 // *****************************************************************
-// #11
+// #10
 // function: reduceInvoice
 let reduceInvoiceData = {
   // ------ REQUIRED ------
@@ -280,10 +301,13 @@ let reduceInvoiceData = {
   ]
 
   // ------ OPTIONAL ------
-  // preferredTaxRate: TAX RATE
-
+  // preferredTaxRate: 0
+  // scVoucherHash: ['HASH#1', 'HASH#2']
+  // token: 'API TOKEN'
+  // tokenIssuer: 0 | 1
+  // scApiKey: ' SC API KEY'
 };
-podBillingService.reduceInvoice(reduceInvoiceData)
+podBilling.reduceInvoice(reduceInvoiceData)
   .then(function (result) {
     console.log('function: reduceInvoice ============>', result, '\n');
   })
@@ -292,7 +316,7 @@ podBillingService.reduceInvoice(reduceInvoiceData)
   });
 
 // *****************************************************************
-// #12
+// #11
 // function: verifyAndCloseInvoice
 // set the verificationNeeded to true when you are creating an invoice, then pay the invoice and call the verifyInvoice
 
@@ -301,9 +325,13 @@ let verifyAndCloseInvoiceData = {
   id: 0 // INVOICE ID
 
   // ------ OPTIONAL ------
+  // scVoucherHash: ['HASH#1', 'HASH#2']
+  // token: 'API TOKEN'
+  // tokenIssuer: 0 | 1
+  // scApiKey: ' SC API KEY'
 };
 
-podBillingService.verifyAndCloseInvoice(verifyAndCloseInvoiceData)
+podBilling.verifyAndCloseInvoice(verifyAndCloseInvoiceData)
   .then(function (result) {
     console.log('function: verifyAndCloseInvoice ============>', result, '\n');
   })
@@ -312,7 +340,7 @@ podBillingService.verifyAndCloseInvoice(verifyAndCloseInvoiceData)
   });
 
 // *****************************************************************
-// #13
+// #12
 // function: closeInvoice
 
 let closeInvoiceData = {
@@ -320,9 +348,13 @@ let closeInvoiceData = {
   id: 0 // INVOICE ID
 
   // ------ OPTIONAL ------
+  // scVoucherHash: ['HASH#1', 'HASH#2']
+  // token: 'API TOKEN'
+  // tokenIssuer: 0 | 1
+  // scApiKey: ' SC API KEY'
 };
 
-podBillingService.closeInvoice(closeInvoiceData)
+podBilling.closeInvoice(closeInvoiceData)
   .then(function (result) {
     console.log('function: closeInvoice ============>', result, '\n');
   })
@@ -331,7 +363,7 @@ podBillingService.closeInvoice(closeInvoiceData)
   });
 
 // *****************************************************************
-// #14
+// #13
 // function: getInvoicePaymentLink
 
 let getInvoicePaymentLinkData = {
@@ -342,9 +374,13 @@ let getInvoicePaymentLinkData = {
   // callbackUri: 'CALLBACK URI'
   // redirectUri: 'REDIRECT URI'
   // gateway: 'PEP'
+  // scVoucherHash: ['HASH#1', 'HASH#2']
+  // token: 'API TOKEN'
+  // tokenIssuer: 0 | 1
+  // scApiKey: ' SC API KEY'
 };
 
-podBillingService.getInvoicePaymentLink(getInvoicePaymentLinkData)
+podBilling.getInvoicePaymentLink(getInvoicePaymentLinkData)
   .then(function (result) {
     console.log('function: getInvoicePaymentLink ============>', result, '\n');
   })
@@ -353,7 +389,7 @@ podBillingService.getInvoicePaymentLink(getInvoicePaymentLinkData)
   });
 
 // *****************************************************************
-// #15
+// #14
 // function: payInvoiceByInvoice
 
 let payInvoiceByInvoiceData = {
@@ -362,9 +398,13 @@ let payInvoiceByInvoiceData = {
   debtorInvoiceId: 0 // INVOICE ID
 
   // ------ OPTIONAL ------
+  // scVoucherHash: ['HASH#1', 'HASH#2']
+  // token: 'API TOKEN'
+  // tokenIssuer: 0 | 1
+  // scApiKey: ' SC API KEY'
 };
 
-podBillingService.payInvoiceByInvoice(payInvoiceByInvoiceData)
+podBilling.payInvoiceByInvoice(payInvoiceByInvoiceData)
   .then(function (result) {
     console.log('function: payInvoiceByInvoice ============>', result, '\n');
   })
@@ -373,20 +413,26 @@ podBillingService.payInvoiceByInvoice(payInvoiceByInvoiceData)
   });
 
 // *****************************************************************
-// #16
+// #15
 // function: payInvoiceInFuture
 
 let payInvoiceInFutureData = {
   // ------ REQUIRED ------
   invoiceId: 0, // INVOICE ID
-  date: 'YYYY/MM/DD'
+  date: 'YYYY/MM/DD | Date Object'
 
   // ------ OPTIONAL (Use just one of them) ------
   // guildCode: 'GUILD CODE'
   // wallet: 'WALLET'
+
+  // ------ OPTIONAL ------
+  // scVoucherHash: ['HASH#1', 'HASH#2']
+  // token: 'API TOKEN'
+  // tokenIssuer: 0 | 1
+  // scApiKey: ' SC API KEY'
 };
 
-podBillingService.payInvoiceInFuture(payInvoiceInFutureData)
+podBilling.payInvoiceInFuture(payInvoiceInFutureData)
   .then(function (result) {
     console.log('function: payInvoiceInFuture ============>', result, '\n');
   })
@@ -395,7 +441,7 @@ podBillingService.payInvoiceInFuture(payInvoiceInFutureData)
   });
 
 // *****************************************************************
-// # 17
+// # 16
 // function: getExportList
 
 let getExportListData = {
@@ -404,12 +450,16 @@ let getExportListData = {
   sie: 0
 
   // ------ OPTIONAL ------
-  // id: ID
+  // id: 0
   // statusCode: 'EXPORT_SERVICE_STATUS_CREATED' | 'EXPORT_SERVICE_STATUS_RUNNING' |'EXPORT_SERVICE_STATUS_SUCCESSFUL' | 'EXPORT_SERVICE_STATUS_FAILED'
   // serviceUrl: 'SERVICE URL'
+  // scVoucherHash: ['HASH#1', 'HASH#2']
+  // token: 'API TOKEN'
+  // tokenIssuer: 0 | 1
+  // scApiKey: ' SC API KEY'
 };
 
-podBillingService.getExportList(getExportListData)
+podBilling.getExportList(getExportListData)
   .then(function (result) {
     console.log('function: getExportList ============>', result, '\n');
   })
@@ -418,12 +468,12 @@ podBillingService.getExportList(getExportListData)
   });
 
 // *****************************************************************
-// #18
+// #17
 // function: requestWalletSettlement
 
 let requestWalletSettlementData = {
   // ------ REQUIRED ------
-  _ott_: 'OTT',
+  ott: 'OTT',
   amount: 0
 
   // ------ OPTIONAL ------
@@ -432,11 +482,15 @@ let requestWalletSettlementData = {
   // lastName: 'LAST NAME'
   // sheba: 'SHEBA WITHOUT IR'
   // currencyCode: 'CURRENCY'
-  // uniqueId: ID
+  // uniqueId: 0
   // description: 'DESCRIPTION'
+  // scVoucherHash: ['HASH#1', 'HASH#2']
+  // token: 'API TOKEN'
+  // tokenIssuer: 0 | 1
+  // scApiKey: ' SC API KEY'
 };
 
-podBillingService.requestWalletSettlement(requestWalletSettlementData)
+podBilling.requestWalletSettlement(requestWalletSettlementData)
   .then(function (result) {
     console.log('function: requestWalletSettlement ============>', result, '\n');
   })
@@ -445,11 +499,11 @@ podBillingService.requestWalletSettlement(requestWalletSettlementData)
   });
 
 // *****************************************************************
-// #19
+// #18
 // function: requestGuildSettlement
 let requestGuildSettlementData = {
   // ------ REQUIRED ------
-  _ott_: 'OTT',
+  ott: 'OTT',
   amount: 0,
   guildCode: 'GUILD CODE'
 
@@ -458,11 +512,15 @@ let requestGuildSettlementData = {
   // lastName: 'LAST NAME'
   // sheba: 'SHEBA WITHOUT IR'
   // currencyCode: 'CURRENCY'
-  // uniqueId: ID
+  // uniqueId: 0
   // description: 'DESCRIPTION'
+  // scVoucherHash: ['HASH#1', 'HASH#2']
+  // token: 'API TOKEN'
+  // tokenIssuer: 0 | 1
+  // scApiKey: ' SC API KEY'
 };
 
-podBillingService.requestGuildSettlement(requestGuildSettlementData)
+podBilling.requestGuildSettlement(requestGuildSettlementData)
   .then(function (result) {
     console.log('function: requestGuildSettlement ============>', result, '\n');
   })
@@ -471,12 +529,12 @@ podBillingService.requestGuildSettlement(requestGuildSettlementData)
   });
 
 // *****************************************************************
-// #20
+// #19
 // function: requestSettlementByTool
 
 let requestSettlementByToolData = {
   // ------ REQUIRED ------
-  _ott_: 'OTT',
+  ott: 'OTT',
   amount: 0,
   guildCode: 'GUILD CODE',
   toolCode: 'TOLL CODE', // 'SETTLEMENT_TOOL_SATNA' | 'SETTLEMENT_TOOL_PAYA' |'SETTLEMENT_TOOL_CARD'
@@ -486,11 +544,15 @@ let requestSettlementByToolData = {
   // firstName: 'FIRST NAME'
   // lastName: 'LAST NAME'
   // currencyCode: 'CURRENCY'
-  // uniqueId: ID
+  // uniqueId: 0
   // description: 'DESCRIPTION'
+  // scVoucherHash: ['HASH#1', 'HASH#2']
+  // token: 'API TOKEN'
+  // tokenIssuer: 0 | 1
+  // scApiKey: ' SC API KEY'
 };
 
-podBillingService.requestSettlementByTool(requestSettlementByToolData)
+podBilling.requestSettlementByTool(requestSettlementByToolData)
   .then(function (result) {
     console.log('function: requestSettlementByTool ============>', result, '\n');
   })
@@ -499,7 +561,7 @@ podBillingService.requestSettlementByTool(requestSettlementByToolData)
   });
 
 // *****************************************************************
-// #21
+// #20
 // function: listSettlements
 let listSettlementsData = {
   // ------ REQUIRED ------
@@ -509,14 +571,18 @@ let listSettlementsData = {
   // size: SIZE
   // statusCode: 'SETTLEMENT_REQUESTED' | 'SETTLEMENT_SENT' | 'SETTLEMENT_DONE'
   // currencyCode: 'CURRENCY'
-  // fromAmount: 'FROM AMOUNT'
-  // toAmount: 'TO AMOUNT'
-  // fromDate: 'YYYY/MM/DD'
-  // toDate: 'YYYY/MM/DD'
-  // uniqueId: ID
+  // fromAmount: 0
+  // toAmount: 0
+  // fromDate: 'YYYY/MM/DD | Date Object'
+  // toDate: 'YYYY/MM/DD | Date Object'
+  // uniqueId: 0
+  // scVoucherHash: ['HASH#1', 'HASH#2']
+  // token: 'API TOKEN'
+  // tokenIssuer: 0 | 1
+  // scApiKey: ' SC API KEY'
 };
 
-podBillingService.listSettlements(listSettlementsData)
+podBilling.listSettlements(listSettlementsData)
   .then(function (result) {
     console.log('function: listSettlements ============>', result, '\n');
   })
@@ -525,7 +591,7 @@ podBillingService.listSettlements(listSettlementsData)
   });
 
 // *****************************************************************
-// #22
+// #21
 // function: addAutoSettlement
 let addAutoSettlementData = {
   // ------ REQUIRED ------
@@ -537,9 +603,37 @@ let addAutoSettlementData = {
   // sheba: 'SHEBA WITHOUT IR'
   // currencyCode: 'CURRENCY'
   // instant:  true | false
+  // scVoucherHash: ['HASH#1', 'HASH#2']
+  // token: 'API TOKEN'
+  // tokenIssuer: 0 | 1
+  // scApiKey: ' SC API KEY'
 };
 
-podBillingService.addAutoSettlement(addAutoSettlementData)
+podBilling.addAutoSettlement(addAutoSettlementData)
+  .then(function (result) {
+    console.log('function: addAutoSettlement ============>', result, '\n');
+  })
+  .catch(function (error) {
+    console.log('error addAutoSettlement ============>', error);
+  });
+
+// *****************************************************************
+// #22
+// function: removeAutoSettlement
+
+let removeAutoSettlementData = {
+  // ------ REQUIRED ------
+  guildCode: 'GUILD CODE'
+
+  // ------ OPTIONAL ------
+  // currencyCode: 'CURRENCY'
+  // scVoucherHash: ['HASH#1', 'HASH#2']
+  // token: 'API TOKEN'
+  // tokenIssuer: 0 | 1
+  // scApiKey: ' SC API KEY'
+};
+
+podBilling.removeAutoSettlement(removeAutoSettlementData)
   .then(function (result) {
     console.log('function: addAutoSettlement ============>', result, '\n');
   })
@@ -549,26 +643,6 @@ podBillingService.addAutoSettlement(addAutoSettlementData)
 
 // *****************************************************************
 // #23
-// function: removeAutoSettlement
-
-let removeAutoSettlementData = {
-  // ------ REQUIRED ------
-  guildCode: 'GUILD CODE'
-
-  // ------ OPTIONAL ------
-  // currencyCode: 'CURRENCY'
-};
-
-podBillingService.removeAutoSettlement(removeAutoSettlementData)
-  .then(function (result) {
-    console.log('function: addAutoSettlement ============>', result, '\n');
-  })
-  .catch(function (error) {
-    console.log('error addAutoSettlement ============>', error);
-  });
-
-// *****************************************************************
-// #24
 // function: getPayInvoiceByWalletLink
 
 let getPayInvoiceByWalletLinkData = {
@@ -578,155 +652,22 @@ let getPayInvoiceByWalletLinkData = {
   // ------ OPTIONAL ------
   // redirectUri: 'REDIRECT URI'
   // callUri: 'CALL URI'
+  // scApiKey: ' SC API KEY'
 };
 
 try {
-  let url = podBillingService.getPayInvoiceByWalletLink(getPayInvoiceByWalletLinkData);
+  let url = podBilling.getPayInvoiceByWalletLink(getPayInvoiceByWalletLinkData);
   console.log('function: addAutoSettlement ============>', url, '\n');
 }
 catch (error) {
   console.log('error getPayInvoiceByWalletLink ============>', error);
 }
+// *****************************************************************
+// #24
+// function: getPayInvoiceByUniqueNumberLink
+
 // *****************************************************************
 // #25
-// function: getPayInvoiceByUniqueNumberLink
-let getPayInvoiceByUniqueNumberLinkData = {
-  // ------ REQUIRED ------
-  uniqueNumber: 'UNIQUE NUMBER'
-
-  // ------ OPTIONAL ------
-  // redirectUri: 'REDIRECT URI'
-  // callUri: 'CALL URI'
-  // gateway: 'PEP'
-};
-
-try {
-  let url = podBillingService.getPayInvoiceByUniqueNumberLink(getPayInvoiceByUniqueNumberLinkData);
-  console.log('function: addAutoSettlement ============>', url, '\n');
-}
-catch (error) {
-  console.log('error getPayInvoiceByWalletLink ============>', error);
-}
-
-// *****************************************************************
-// #26
-// function: guildList
-
-let guildListData = {
-  // ------ REQUIRED ------
-
-  // ------ OPTIONAL ------
-  // offset: OFFSET
-  // size: SIZE
-};
-
-podBillingService.guildList(guildListData)
-  .then(function (result) {
-    console.log('function: addAutoSettlement ============>', result, '\n');
-  })
-  .catch(function (error) {
-    console.log('error addAutoSettlement ============>', error);
-  });
-
-// *****************************************************************
-// #27
-// function: addDealer
-let addDealerData = {
-  // ------ REQUIRED ------
-  dealerBizId: 0 // ID
-
-  // ------ OPTIONAL ------
-  // allProductAllow: true | false
-};
-podBillingService.addDealer(addDealerData)
-  .then(function (result) {
-    console.log('function: addDealer ============>', result, '\n');
-  })
-  .catch(function (error) {
-    console.log('error addDealer ============>', error);
-  });
-
-// *****************************************************************
-// #28
-// function: dealerList
-let dealerListData = {
-  // ------ REQUIRED ------
-
-  // ------ OPTIONAL ------
-  // dealerBizId: ID
-  // enable: true | false
-  // offset: OFFSET
-  // size: SIZE
-};
-
-podBillingService.dealerList(dealerListData)
-  .then(function (result) {
-    console.log('function: dealerList ============>', JSON.stringify(result, null, 2), '\n');
-  })
-  .catch(function (error) {
-    console.log('error dealerList ============>', error);
-  });
-
-// *****************************************************************
-// #29
-// function: enableDealer
-
-let enableDealerData = {
-  // ------ REQUIRED ------
-  dealerBizId: 0 // ID
-
-  // ------ OPTIONAL ------
-};
-podBillingService.enableDealer(enableDealerData)
-  .then(function (result) {
-    console.log('function: enableDealer ============>', JSON.stringify(result, null, 2), '\n');
-  })
-  .catch(function (error) {
-    console.log('error enableDealer ============>', error);
-  });
-
-// *****************************************************************
-// #30
-// function: disenableDealer
-
-let disableDealerData = {
-  // ------ REQUIRED ------
-  dealerBizId: 0 // ID
-
-  // ------ OPTIONAL ------
-};
-podBillingService.disableDealer(disableDealerData)
-  .then(function (result) {
-    console.log('function: disableDealer ============>', JSON.stringify(result, null, 2), '\n');
-  })
-  .catch(function (error) {
-    console.log('error disableDealer ============>', error);
-  });
-
-// *****************************************************************
-// #31
-// function: businessDealingList
-
-let businessDealingListData = {
-  // ------ REQUIRED ------
-
-  // ------ OPTIONAL ------
-  // dealingBusinessId: ID
-  // enable: true | false
-  // offset: OFFSET
-  // size: SIZE
-};
-
-podBillingService.businessDealingList(businessDealingListData)
-  .then(function (result) {
-    console.log('function: businessDealingList ============>', JSON.stringify(result, null, 2), '\n');
-  })
-  .catch(function (error) {
-    console.log('error businessDealingList ============>', error);
-  });
-
-// *****************************************************************
-// #32
 // function: issueMultiInvoice
 
 let issueMultiInvoiceData = {
@@ -775,12 +716,16 @@ let issueMultiInvoiceData = {
   }
 
   // ------ OPTIONAL ------
-  // delegatorId: ARRAY OF INTEGERS
-  // delegationHash: ARRAY OF STRING
-  // forceDelegation: 'FORCE DELIGATION'
+  // delegatorId: [0, 0]
+  // delegationHash: ['HASH#1', 'HASH#2']
+  // forceDelegation: true | false
+  // scVoucherHash: ['HASH#1', 'HASH#2']
+  // token: 'API TOKEN'
+  // tokenIssuer: 0 | 1
+  // scApiKey: ' SC API KEY'
 };
 
-podBillingService.issueMultiInvoice(issueMultiInvoiceData)
+podBilling.issueMultiInvoice(issueMultiInvoiceData)
   .then(function (result) {
     console.log('function: issueMultiInvoice ============>', JSON.stringify(result, null, 2), '\n');
   })
@@ -789,7 +734,7 @@ podBillingService.issueMultiInvoice(issueMultiInvoiceData)
   });
 
 // *****************************************************************
-// #33
+// #26
 // function: reduceMultiInvoice
 let reduceMultiInvoiceData = {
   // ------ REQUIRED ------
@@ -822,9 +767,13 @@ let reduceMultiInvoiceData = {
       }]
   }
   // ------ OPTIONAL ------
+  // scVoucherHash: ['HASH#1', 'HASH#2']
+  // token: 'API TOKEN'
+  // tokenIssuer: 0 | 1
+  // scApiKey: ' SC API KEY'
 };
 
-podBillingService.reduceMultiInvoice({ data: reduceMultiInvoiceData })
+podBilling.reduceMultiInvoice({ data: reduceMultiInvoiceData })
   .then(function (result) {
     console.log('function: reduceMultiInvoice ============>', JSON.stringify(result, null, 2), '\n');
   })
@@ -833,7 +782,7 @@ podBillingService.reduceMultiInvoice({ data: reduceMultiInvoiceData })
   });
 
 // *****************************************************************
-// #34
+// #27
 // function: reduceMultiInvoiceAndCashOut
 let reduceMultiInvoiceAndCashOutData = {
   // ------ REQUIRED ------
@@ -866,9 +815,13 @@ let reduceMultiInvoiceAndCashOutData = {
       }]
   }
   // ------ OPTIONAL ------
+  // scVoucherHash: ['HASH#1', 'HASH#2']
+  // token: 'API TOKEN'
+  // tokenIssuer: 0 | 1
+  // scApiKey: ' SC API KEY'
 };
 
-podBillingService.reduceMultiInvoiceAndCashOut(reduceMultiInvoiceAndCashOutData)
+podBilling.reduceMultiInvoiceAndCashOut(reduceMultiInvoiceAndCashOutData)
   .then(function (result) {
     console.log('function: reduceMultiInvoiceAndCashOut ============>', JSON.stringify(result, null, 2), '\n');
   })
@@ -876,104 +829,415 @@ podBillingService.reduceMultiInvoiceAndCashOut(reduceMultiInvoiceAndCashOutData)
     console.log('error reduceMultiInvoiceAndCashOut ============>', error);
   });
 
-// *****************************************************************
-// #35
-// function: addDealerProductPermission
-let addDealerProductPermissionData = {
+// --------------------------------------------- Voucher ---------------------------------------------
+// #28
+// function: defineCreditVoucher
+let defineCreditVoucherData = {
   // ------ REQUIRED ------
-  dealerBizId: 0,
-  productId: 0
+  guildCode: 'GUILD CODE',
+  expireDate: 'YYYY/MM/DD | Date Object',
+  vouchers: [
+    {
+      // ------ REQUIRED ------
+      count: 0,
+      amount: 0,
+      name: 'NAME',
+      description: 'DESCRIPTION'
+
+      // ------ OPTIONAL ------
+      // hash: 'HASH'
+    },
+    {
+      // ------ REQUIRED ------
+      count: 0,
+      amount: 0,
+      name: 'NAME',
+      description: 'DESCRIPTION'
+
+      // ------ OPTIONAL ------
+      // hash: 'HASH'
+    }
+  ]
+
   // ------ OPTIONAL ------
+  // limitedConsumerId: 0
+  // currencyCode: 'CURRENCY'
+  // scVoucherHash: ['HASH#1', 'HASH#2']
+  // token: 'API TOKEN'
+  // tokenIssuer: 0 | 1
+  // scApiKey: ' SC API KEY'
 };
 
-podBillingService.addDealerProductPermission(addDealerProductPermissionData)
+podBilling.defineCreditVoucher(defineCreditVoucherData)
   .then(function (result) {
-    console.log('function: addDealerProductPermission ============>', JSON.stringify(result, null, 2), '\n');
+    console.log('function: defineCreditVoucher ============>', JSON.stringify(result, null, 2), '\n');
   })
   .catch(function (error) {
-    console.log('error addDealerProductPermission ============>', error);
+    console.log('error defineCreditVoucher ============>', error);
   });
 
 // *****************************************************************
-// #36
-// function: dealerProductPermissionList
-let dealerProductPermissionListData = {
+// #29
+// function: defineDiscountAmountVoucher
+
+let defineDiscountAmountVoucherData = {
   // ------ REQUIRED ------
+  guildCode: 'GUILD CODE',
+  expireDate: 'YYYY/MM/DD | Date Object',
+  vouchers: [
+    {
+      // ------ REQUIRED ------
+      count: 0,
+      amount: 0,
+      name: 'NAME',
+      description: 'DESCRIPTION'
+
+      // ------ OPTIONAL ------
+      // hash: 'HASH'
+    },
+    {
+      // ------ REQUIRED ------
+      count: 0,
+      amount: 0,
+      name: 'NAME',
+      description: 'DESCRIPTION'
+
+      // ------ OPTIONAL ------
+      // hash: 'HASH'
+    }
+  ]
 
   // ------ OPTIONAL ------
-  // productId: ID
-  // dealerBizId: ID
-  // enable: true | false
-  // offset: OFFSET
-  // size: SIZE
+  // productId: [0, 0]
+  // dealerBusinessId: [0, 0]
+  // limitedConsumerId: 0
+  // currencyCode: 'CURRENCY'
+  // scVoucherHash: ['HASH#1', 'HASH#2']
+  // token: 'API TOKEN'
+  // tokenIssuer: 0 | 1
+  // scApiKey: ' SC API KEY'
 };
 
-podBillingService.dealerProductPermissionList(dealerProductPermissionListData)
+podBilling.defineDiscountAmountVoucher(defineDiscountAmountVoucherData)
   .then(function (result) {
-    console.log('function: dealerProductPermissionList ============>', JSON.stringify(result, null, 2), '\n');
+    console.log('function: defineDiscountAmountVoucher ============>', JSON.stringify(result, null, 2), '\n');
   })
   .catch(function (error) {
-    console.log('error dealerProductPermissionList ============>', error);
+    console.log('error defineDiscountAmountVoucher ============>', error);
+  });
+
+// *****************************************************************
+// #30
+// function: defineDiscountPercentageVoucher
+let defineDiscountPercentageVoucherData = {
+  // ------ REQUIRED ------
+  guildCode: 'GUILD CODE',
+  expireDate: 'YYYY/MM/DD | Date Object',
+  vouchers: [
+    {
+      // ------ REQUIRED ------
+      count: 0,
+      amount: 0,
+      name: 'NAME',
+      discountPercentage: 0,
+      description: 'DESCRIPTION'
+
+      // ------ OPTIONAL ------
+      // hash: 'HASH'
+    },
+    {
+      // ------ REQUIRED ------
+      count: 0,
+      amount: 0,
+      name: 'NAME',
+      discountPercentage: 0,
+      description: 'DESCRIPTION'
+
+      // ------ OPTIONAL ------
+      // hash: 'HASH'
+    }
+  ],
+  type: 0 // 4 | 8 | 16
+
+  // ------ OPTIONAL ------
+  // productId: [0, 0]
+  // dealerBusinessId: [0, 0]
+  // limitedConsumerId: 0
+  // currencyCode: 'CURRENCY'
+  // scVoucherHash: ['HASH#1', 'HASH#2']
+  // token: 'API TOKEN'
+  // tokenIssuer: 0 | 1
+  // scApiKey: ' SC API KEY'
+};
+
+podBilling.applyVoucher(defineDiscountPercentageVoucherData)
+  .then(function (result) {
+    console.log('function: applyVoucher ============>', JSON.stringify(result, null, 2), '\n');
+  })
+  .catch(function (error) {
+    console.log('error applyVoucher ============>', error);
+  });
+
+// *****************************************************************
+// #31
+// function: applyVoucher
+
+let applyVoucherData = {
+  // ------ REQUIRED ------
+  ott: 'OTT',
+  invoiceId: 0,
+  voucherHash: ['HASH#1', 'HASH#1']
+
+  // ------ OPTIONAL ------
+  // preview: true | false
+  // scVoucherHash: ['HASH#1', 'HASH#2']
+  // token: 'API TOKEN'
+  // tokenIssuer: 0 | 1
+  // scApiKey: ' SC API KEY'
+};
+
+podBilling.applyVoucher(applyVoucherData)
+  .then(function (result) {
+    console.log('function: applyVoucher ============>', JSON.stringify(result, null, 2), '\n');
+  })
+  .catch(function (error) {
+    console.log('error applyVoucher ============>', error);
+  });
+
+// *****************************************************************
+// #32
+// function: getVoucherList
+let getVoucherListData = {
+  // ------ REQUIRED ------
+  offset: 0,
+
+  // ------ OPTIONAL ------
+  size: 0
+  // consumerId: 0
+  // hash: 'HASH'
+  // name: 'NAME'
+  // type: 0
+  // guildCode: ['GUILD', 'GUILD']
+  // currencyCode: 'CURRENCY'
+  // amountFrom: 0
+  // amountTo: 0
+  // discountPercentageFrom: 0
+  // discountPercentageTo: 0
+  // expireDateFrom: 'YYYY/MM/DD | Date Object'
+  // expireDateTo: 'YYYY/MM/DD | Date Object'
+  // productId: [0, 0]
+  // consumDateFrom: 'YYYY/MM/DD | Date Object'
+  // consumDateTo: 'YYYY/MM/DD | Date Object'
+  // usedAmountFrom: 0
+  // usedAmountTo: 0
+  // active: true | false
+  // used: true | false
+  // scVoucherHash: ['HASH#1', 'HASH#2']
+  // token: 'API TOKEN'
+  // tokenIssuer: 0 | 1
+  // scApiKey: ' SC API KEY'
+};
+podBilling.getVoucherList(getVoucherListData)
+  .then(function (result) {
+    console.log('function: getVoucherList ============>', JSON.stringify(result, null, 2), '\n');
+  })
+  .catch(function (error) {
+    console.log('error getVoucherList ============>', error);
+  });
+
+// *****************************************************************
+// function: deactivateVoucher
+// #33
+let deactivateVoucherData = {
+  // ------ REQUIRED ------
+  id: 0
+
+  // ------ OPTIONAL ------
+  // scVoucherHash: ['HASH#1', 'HASH#2']
+  // token: 'API TOKEN'
+  // tokenIssuer: 0 | 1
+  // scApiKey: ' SC API KEY'
+};
+podBilling.deactivateVoucher(deactivateVoucherData)
+  .then(function (result) {
+    console.log('function: deactivateVoucher ============>', JSON.stringify(result, null, 2), '\n');
+  })
+  .catch(function (error) {
+    console.log('error deactivateVoucher ============>', error);
+  });
+
+// *****************************************************************
+// function: activateVoucher
+// #34
+let activateVoucherData = {
+  // ------ REQUIRED ------
+  id: 0
+
+  // ------ OPTIONAL ------
+  // scVoucherHash: ['HASH#1', 'HASH#2']
+  // token: 'API TOKEN'
+  // tokenIssuer: 0 | 1
+  // scApiKey: ' SC API KEY'
+};
+podBilling.activateVoucher(activateVoucherData)
+  .then(function (result) {
+    console.log('function: activateVoucher ============>', JSON.stringify(result, null, 2), '\n');
+  })
+  .catch(function (error) {
+    console.log('error activateVoucher ============>', error);
+  });
+
+// --------------------------------------------- Direct Debate ---------------------------------------------
+// function: defineDirectWithdraw
+// #35
+let defineDirectWithdrawData = {
+  // ------ REQUIRED ------
+  username: 'USER NAME',
+  depositNumber: 'BANK ACCOUNT NUMBER',
+  onDemand: false, // true | false
+  minAmount: 0,
+  maxAmount: 0,
+  wallet: 'WALLET', // 'PODLAND_WALLET FOR POD WALLET'
+
+  // ------ REQUIRED (One of these fields is required) ------
+  privateKey: 'PRIVATE KEY'
+  // privateKeyAddress: 'PRIVATE KEY FILE ADDRESS'
+
+  // ------ OPTIONAL ------
+  // scVoucherHash: ['HASH#1', 'HASH#2']
+  // token: 'API TOKEN'
+  // tokenIssuer: 0 | 1
+  // scApiKey: ' SC API KEY'
+};
+podBilling.defineDirectWithdraw(defineDirectWithdrawData)
+  .then(function (result) {
+    console.log('function: directWithdrawList ============>', JSON.stringify(result, null, 2), '\n');
+  })
+  .catch(function (error) {
+    console.log('error defineDirectWithdraw ============>', error);
+  });
+
+// *****************************************************************
+// function: directWithdrawList
+// #36
+let directWithdrawListData = {
+  // ------ REQUIRED ------
+  offset: 0,
+  size: 0
+
+  // ------ OPTIONAL ------
+  // wallet: 'WALLET' // 'PODLAND_WALLET FOR POD WALLET'
+  // scVoucherHash: ['HASH#1', 'HASH#2']
+  // token: 'API TOKEN'
+  // tokenIssuer: 0 | 1
+  // scApiKey: ' SC API KEY'
+};
+podBilling.directWithdrawList(directWithdrawListData)
+  .then(function (result) {
+    console.log('function: directWithdrawList ============>', JSON.stringify(result, null, 2), '\n');
+  })
+  .catch(function (error) {
+    console.log('error directWithdrawList ============>', error);
   });
 
 // *****************************************************************
 // #37
-// function: dealingProductPermissionList
-let dealingProductPermissionListData = {
+// function: updateDirectWithdraw
+let updateDirectWithdrawData = {
   // ------ REQUIRED ------
+  id: 0,
+  username: 'USER NAME',
+  privateKey: 'PRIVATE KEY',
+  depositNumber: 'BANK ACCOUNT NUMBER',
+  onDemand: true, // true | false
+  minAmount: 0,
+  maxAmount: 0,
+  wallet: 'WALLET' // 'PODLAND_WALLET FOR POD WALLET'
 
   // ------ OPTIONAL ------
-  // productId: ID
-  // dealerBizId: ID
-  // enable: true | false
-  // offset: OFFSET
-  // size: SIZE
+  // scVoucherHash: ['HASH#1', 'HASH#2']
+  // token: 'API TOKEN'
+  // tokenIssuer: 0 | 1
+  // scApiKey: ' SC API KEY'
 };
-
-podBillingService.dealingProductPermissionList(dealingProductPermissionListData)
+podBilling.updateDirectWithdraw(updateDirectWithdrawData)
   .then(function (result) {
-    console.log('function: dealingProductPermissionList ============>', JSON.stringify(result, null, 2), '\n');
+    console.log('function: updateDirectWithdraw ============>', JSON.stringify(result, null, 2), '\n');
   })
   .catch(function (error) {
-    console.log('error dealingProductPermissionList ============>', error);
+    console.log('error updateDirectWithdraw ============>', error);
   });
 
 // *****************************************************************
 // #38
-// function: disableDealerProductPermission
-
-let disableDealerProductPermissionData = {
+// function: revokeDirectWithdraw
+let revokeDirectWithdrawData = {
   // ------ REQUIRED ------
-  dealerBizId: 0,
-  productId: 0
+  id: 0
 
   // ------ OPTIONAL ------
+  // scVoucherHash: ['HASH#1', 'HASH#2']
+  // token: 'API TOKEN'
+  // tokenIssuer: 0 | 1
+  // scApiKey: ' SC API KEY'
 };
-
-podBillingService.disableDealerProductPermission(disableDealerProductPermissionData)
+podBilling.revokeDirectWithdraw(revokeDirectWithdrawData)
   .then(function (result) {
-    console.log('function: disableDealerProductPermission ============>', JSON.stringify(result, null, 2), '\n');
+    console.log('function: revokeDirectWithdraw ============>', JSON.stringify(result, null, 2), '\n');
   })
   .catch(function (error) {
-    console.log('error disableDealerProductPermission ============>', error);
+    console.log('error revokeDirectWithdraw ============>', error);
   });
 
 // *****************************************************************
 // #39
-// function: enableDealerProductPermissionData
-
-let enableDealerProductPermissionData = {
+// function: updateDirectWithdraw
+let payInvoiceByCreditData = {
   // ------ REQUIRED ------
-  dealerBizId: 0,
-  productId: 0
+  invoiceId: 6723179,
+  ott: '4f6355459d1c17ae'
 
   // ------ OPTIONAL ------
+  // delegatorId: [0, 0]
+  // delegationHash: ['HASH#1', 'HASH#2']
+  // forceDelegation: true | false
+  // wallet: 'WALLET'
+  // scVoucherHash: ['HASH#1', 'HASH#2']
+  // token: 'API TOKEN'
+  // tokenIssuer: 0 | 1
+  // scApiKey: ' SC API KEY'
 };
 
-podBillingService.enableDealerProductPermission(enableDealerProductPermissionData)
+podBilling.payInvoiceByCredit(payInvoiceByCreditData)
   .then(function (result) {
-    console.log('function: enableDealerProductPermission ============>', JSON.stringify(result, null, 2), '\n');
+    console.log('function: payInvoiceByCredit ============>', JSON.stringify(result, null, 2), '\n');
   })
   .catch(function (error) {
-    console.log('error enableDealerProductPermission ============>', error);
+    console.log('error payInvoiceByCredit ============>', error);
+  });
+
+// *****************************************************************
+// #40
+// function: revokeDirectWithdraw
+let payAnyInvoiceByCreditData = {
+  // ------ REQUIRED ------
+  invoiceId: 6699284,
+  ott: 'da558bd914dd61ef',
+  wallet: 'PODLAND_WALLET'
+
+  // ------ OPTIONAL ------
+  // delegatorId: [0, 0]
+  // delegationHash: ['HASH#1', 'HASH#2']
+  // forceDelegation: true | false
+  // scVoucherHash: ['HASH#1', 'HASH#2']
+  // token: 'API TOKEN'
+  // tokenIssuer: 0 | 1
+  // scApiKey: ' SC API KEY'
+};
+podBilling.payAnyInvoiceByCredit(payAnyInvoiceByCreditData)
+  .then(function (result) {
+    console.log('function: payAnyInvoiceByCredit ============>', JSON.stringify(result, null, 2), '\n');
+  })
+  .catch(function (error) {
+    console.log('error payAnyInvoiceByCredit ============>', error);
   });

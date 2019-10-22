@@ -1,23 +1,28 @@
 // External Modules
 const expect = require('chai').expect;
 
+// Pod Modules
+let PodCommonService = require('pod-common-service');
+let podCommon = new PodCommonService({ apiToken: 'API TOKEN' });
+
 // Main Module
 const PodBillingService = require('../lib/main');
 
-let myApiToken = 'API TOKEN';
-// otherApiToken = 'API TOKEN';
 // Variable Declaration & Initialization
+let myApiToken = 'API TOKEN';
 let podBillingService = new PodBillingService({
   apiToken: myApiToken
 });
 let issueInvoiceBody = {
   productList: [
-    { productId: 0, price: 100, quantity: 2, productDescription: 'My first product!' },
-    { productId: 0, price: 200, quantity: 10, productDescription: 'My Second Product!' }
+    { productId: 0, price: 3, quantity: 2, productDescription: 'My first product!' },
+    { productId: 0, price: 10, quantity: 10, productDescription: 'My Second Product!' }
   ],
   guildCode: 'INFORMATION_TECHNOLOGY_GUILD',
-  userId: 1453911,
-  metadata: { name: 'ehsan' }
+  userId: 1453911
+  // metadata: { name: 'ehsan', name2: 'ehsan2' }
+  // voucherHash: ['hash#1', 'hash#2']
+  // deadline: new Date()
   // verificationNeeded: true
 };
 let preInvoiceObj = {
@@ -38,15 +43,13 @@ let creditorInvoiceId = 0;
 let debtorInvoiceId = 0;
 let futureInvoiceId = 0;
 let guildCode = 'INFORMATION_TECHNOLOGY_GUILD';
-let amount = 1000;
+let amount = 100;
 let toolCode = 'SETTLEMENT_TOOL_SATNA';
 let toolId = '080570100611513898506001';
 let redirectUri = 'http://www.google.com/';
 let callUri = 'http://www.google.com/';
 let gateway = 'PEP';
 let uniqueNumber;
-// let myBizId = 3605;
-let otherBizId = 3612;
 let issueMultiInvoiceData = {
   data: {
     // redirectURL: 'http://www.google.com',
@@ -63,8 +66,8 @@ let issueMultiInvoiceData = {
       // description: '',
       invoiceItemVOs: [{
         productId: 0,
-        price: 0,
-        quantity: 0,
+        price: 80,
+        quantity: 1,
         description: 'ss'
       }]
     },
@@ -76,8 +79,21 @@ let issueMultiInvoiceData = {
       // description: '',
       invoiceItemVOs: [{
         productId: 0,
-        price: 110,
-        quantity: 10,
+        price: 300,
+        quantity: 1,
+        description: 'Hello'
+      }]
+    },
+    {
+      businessId: 3605,
+      guildCode: 'TOILETRIES_GUILD',
+      // billNumber: '123456',
+      // metadata: '',
+      // description: '',
+      invoiceItemVOs: [{
+        productId: 0,
+        price: 200,
+        quantity: 1,
         description: 'Hello'
       }]
     }],
@@ -85,8 +101,8 @@ let issueMultiInvoiceData = {
     // customerMetadata: '',
     customerInvoiceItemVOs: [{
       productId: 0,
-      price: 110,
-      quantity: 10,
+      price: 580,
+      quantity: 1,
       description: 'Hello'
     }]
   }
@@ -121,91 +137,30 @@ let reduceMultiInvoiceData = {
       }]
   }
 };
-let productId = 15530;
+let privateKey = '<RSAKeyValue><Modulus>p432JnQ+HxV2jzFv+i1bG3mEBoCrca0BcRiPBIjKJ+ay3IVVEx71C9IhTdIm1vnzzxufmpU5HA3IzUuo+YfVjybn6aZp78AjH2BInQyl43NNVGZyLBJ0YXnHKaZuWBlxnW25tzUshlJtphDHuHxaXDkuccKc0ze0BQjQ98/bBL0=</Modulus><Exponent>AQAB</Exponent><P>18o6JZPz6ftCukdjfYUfAlr5kUQuGE6aYVF7md493vbyx30FF5Js/8EstoHVXyI82BLm8UkSG0C8PMPKNIRJzw==</P><Q>xsbF16w14Foff1MXcuVW8jfZKbMKTdDpMEfzK8jQNROND1B3uLfxmFCLI3/SVuRYfPd65psxIxYn3V5Imq1Hsw==</Q><DP>cl0F9hZ0hcQZODpPex2LMqdebuOwfkdiQEN7+y8yoTFFt/4FLdn3lJAfj1Y97B5sGqPh62yrgPANEzM8vhqCNw==</DP><DQ>JzCfZwMr6By8owTF1cBDoSPDrAYBnQ/4Oa2l0tcXva8qG3/Y6tFRT59pn0kfNkR08cZ1M6wbRviiSXHCTMSnIw==</DQ><InverseQ>KXUY0Rtae0YgJ/QdZ6+AkvzuyYDohzRmrzY8AHgDUnNbYN5kzdsEAPC1fhkScPAA7MH420Fl2FH9V4f9I04yFg==</InverseQ><D>H2c4+i4RMow4Q1A1t4Lmr3iP6RQWjeCqA4Nh0qy8jsvrO+91aXcE4GlKuqYnh2Ujb+6ydCuBn6NpvihvDA2MVdF20KZW4PZX0Bq+yj/WV4hH9mOoUKE86rZIU90rHNF0aRRPRAaCaIXCExyK9LvnGcDKjX0liD5pWPHDL8J2/9U=</D></RSAKeyValue>';
+// let myBizId = 3605;
+// let otherBizId = 3612;
+// let productId = 15530;
+// otherApiToken = 'API TOKEN';
 
 // #1
-describe('API: getOtt ', function () {
-  this.timeout(10000);
-  it('correct request', function (done) {
-    podBillingService.getOtt({})
-      .then(function (result) {
-        console.log(result);
-        expect(result).to.have.property('hasError', false);
-        expect(result).to.have.property('ott');
-        done();
-      })
-      .catch(function () {
-        // console.log(error);
-        done(new Error());
-      });
-  });
-});
-
-// #2
 describe('API: issueInvoice ', function () {
   this.timeout(10000);
   before('getOtt', function (done) {
-    podBillingService.getOtt({})
+    podCommon.getOtt({})
       .then(function (result) {
         ott = result.ott;
         done();
       })
-      .catch(function () {
-        // console.log(error);
+      .catch(function (error) {
+        console.log(error);
         done(new Error());
       });
   });
   it('correct request', function (done) {
-    podBillingService.issueInvoice(Object.assign(issueInvoiceBody, { _ott_: ott }))
+    podBillingService.issueInvoice(Object.assign(issueInvoiceBody, { ott: ott }))
       .then(function (result) {
-        console.log(result);
-        expect(result).to.have.property('hasError', false);
-        expect(result).to.have.property('result');
-        done();
-      })
-      .catch(function () {
-        // console.log(error);
-        done(new Error());
-      });
-  });
-});
-
-// #3
-describe('API: createPreInvoice ', function () {
-  this.timeout(10000);
-  before('getOtt', function (done) {
-    podBillingService.getOtt({})
-      .then(function (result) {
-        ott = result.ott;
-        done();
-      })
-      .catch(function () {
-        // console.log(error);
-        done(new Error());
-      });
-  });
-  it('correct request', function (done) {
-    podBillingService.createPreInvoice(Object.assign(preInvoiceObj, { ott: ott }))
-      .then(function (result) {
-        console.log(result);
-        expect(result).to.have.property('HasError', false);
-        expect(result).to.have.property('Result');
-        done();
-      })
-      .catch(function () {
-        // console.log(error);
-        done(new Error());
-      });
-  });
-});
-
-// #4
-describe('API: getInvoiceList ', function () {
-  this.timeout(10000);
-  it('correct request', function (done) {
-    podBillingService.getInvoiceList({ offset: offset, size: size })
-      .then(function (result) {
-        console.log(result);
+        console.log(JSON.stringify(result, null, 2));
         expect(result).to.have.property('hasError', false);
         expect(result).to.have.property('result');
         done();
@@ -217,16 +172,63 @@ describe('API: getInvoiceList ', function () {
   });
 });
 
-// #5
+// #2
+describe('API: createPreInvoice ', function () {
+  this.timeout(10000);
+  before('getOtt', function (done) {
+    podCommon.getOtt({})
+      .then(function (result) {
+        ott = result.ott;
+        done();
+      })
+      .catch(function (error) {
+        console.log(error);
+        done(new Error());
+      });
+  });
+  it('correct request', function (done) {
+    podBillingService.createPreInvoice(Object.assign(preInvoiceObj, { ott: 'te9RGYweSK' }))
+      .then(function (result) {
+        console.log('!!!!!!!!!!!!!!!', JSON.stringify(result, null, 2), '!!!!!!!!!');
+        expect(result).to.have.property('hasError', false);
+        expect(result).to.have.property('result');
+        done();
+      })
+      .catch(function (error) {
+        console.log('==============>', error);
+        done(new Error());
+      });
+  });
+});
+
+// #3
+describe('API: getInvoiceList ', function () {
+  this.timeout(10000);
+  it('correct request', function (done) {
+    podBillingService.getInvoiceList({ offset: 0, size: 10, productIdList: [15530] })
+      .then(function (result) {
+        console.log(JSON.stringify(result, null, 2), '======>', result.result.length, '========>', result.count);
+        expect(result).to.have.property('hasError', false);
+        expect(result).to.have.property('result');
+        done();
+      })
+      .catch(function (error) {
+        console.log(error);
+        done(new Error());
+      });
+  });
+});
+
+// #4
 describe('API: payInvoice ', function () {
   this.timeout(10000);
   before('issueInvoice', function (done) {
-    podBillingService.getOtt({})
+    podCommon.getOtt({})
       .then(function (result) {
         ott = result.ott;
       })
       .then(function () {
-        return podBillingService.issueInvoice(Object.assign(issueInvoiceBody, { _ott_: ott }));
+        return podBillingService.issueInvoice(Object.assign(issueInvoiceBody, { ott: ott }));
       })
       .then(function (result) {
         invoiceId = result.result.id;
@@ -252,16 +254,16 @@ describe('API: payInvoice ', function () {
   });
 });
 
-// #6
+// #5
 describe('API: sendInvoicePaymentSMS ', function () {
   this.timeout(10000);
   before('issueInvoice', function (done) {
-    podBillingService.getOtt({})
+    podCommon.getOtt({})
       .then(function (result) {
         ott = result.ott;
       })
       .then(function () {
-        return podBillingService.issueInvoice(Object.assign(issueInvoiceBody, { _ott_: ott }));
+        return podBillingService.issueInvoice(Object.assign(issueInvoiceBody, { ott: ott }));
       })
       .then(function (result) {
         invoiceId = result.result.id;
@@ -287,13 +289,13 @@ describe('API: sendInvoicePaymentSMS ', function () {
   });
 });
 
-// #7
+// #6
 describe('API: getInvoiceListByMetadata ', function () {
   this.timeout(10000);
   it('correct request', function (done) {
-    podBillingService.getInvoiceListByMetadata({ metaQuery: metaQuery, size: 1 })
+    podBillingService.getInvoiceListByMetadata({ metaQuery: metaQuery, size: 3 })
       .then(function (result) {
-        console.log(result);
+        console.log(JSON.stringify(result, null, 2), '======>', result.result.length, '========>', result.count);
         expect(result).to.have.property('hasError', false);
         expect(result).to.have.property('result');
         done();
@@ -305,7 +307,7 @@ describe('API: getInvoiceListByMetadata ', function () {
   });
 });
 
-// #8
+// #7
 describe('API: getInvoiceListAsFile ', function () {
   this.timeout(10000);
   it('correct request', function (done) {
@@ -323,16 +325,16 @@ describe('API: getInvoiceListAsFile ', function () {
   });
 });
 
-// #9 -> Needs Scenario
+// #8 -> Needs Scenario
 describe('API: verifyInvoice ', function () {
   this.timeout(10000);
   before('issueInvoice', function (done) {
-    podBillingService.getOtt({})
+    podCommon.getOtt({})
       .then(function (result) {
         ott = result.ott;
       })
       .then(function () {
-        return podBillingService.issueInvoice(Object.assign(issueInvoiceBody, { _ott_: ott }));
+        return podBillingService.issueInvoice(Object.assign(issueInvoiceBody, { ott: ott }));
       })
       .then(function (result) {
         invoiceId = result.result.id;
@@ -358,16 +360,16 @@ describe('API: verifyInvoice ', function () {
   });
 });
 
-// #10
+// #9
 describe('API: cancelInvoice ', function () {
   this.timeout(10000);
   before('issueInvoice', function (done) {
-    podBillingService.getOtt({})
+    podCommon.getOtt({})
       .then(function (result) {
         ott = result.ott;
       })
       .then(function () {
-        return podBillingService.issueInvoice(Object.assign(issueInvoiceBody, { _ott_: ott }));
+        return podBillingService.issueInvoice(Object.assign(issueInvoiceBody, { ott: ott }));
       })
       .then(function (result) {
         invoiceId = result.result.id;
@@ -393,18 +395,19 @@ describe('API: cancelInvoice ', function () {
   });
 });
 
-// #11
+// #10
 describe('API: reduceInvoice ', function () {
   this.timeout(10000);
   before('issueInvoice', function (done) {
-    podBillingService.getOtt({})
+    podCommon.getOtt({})
       .then(function (result) {
         ott = result.ott;
       })
       .then(function () {
-        return podBillingService.issueInvoice(Object.assign(issueInvoiceBody, { _ott_: ott }));
+        return podBillingService.issueInvoice(Object.assign(issueInvoiceBody, { ott: ott }));
       })
       .then(function (result) {
+        console.log('------------------------>', JSON.stringify(result, null, 2));
         reduceBillingObj = {
           id: result.result.id,
           invoiceItemList: [
@@ -415,8 +418,8 @@ describe('API: reduceInvoice ', function () {
         };
         done();
       })
-      .catch(function () {
-        // console.log(error);
+      .catch(function (error) {
+        console.log(error);
         done(new Error());
       });
   });
@@ -435,16 +438,16 @@ describe('API: reduceInvoice ', function () {
   });
 });
 
-// #12 -> Needs Scenario
+// #11 -> Needs Scenario
 describe('API: verifyAndCloseInvoice ', function () {
   this.timeout(10000);
   before('issueInvoice', function (done) {
-    podBillingService.getOtt({})
+    podCommon.getOtt({})
       .then(function (result) {
         ott = result.ott;
       })
       .then(function () {
-        return podBillingService.issueInvoice(Object.assign(issueInvoiceBody, { _ott_: ott }));
+        return podBillingService.issueInvoice(Object.assign(issueInvoiceBody, { ott: ott }));
       })
       .then(function (result) {
         invoiceId = result.result.id;
@@ -470,16 +473,16 @@ describe('API: verifyAndCloseInvoice ', function () {
   });
 });
 
-// #13
+// #12
 describe('API: closeInvoice ', function () {
   this.timeout(10000);
   before('issueInvoice', function (done) {
-    podBillingService.getOtt({})
+    podCommon.getOtt({})
       .then(function (result) {
         ott = result.ott;
       })
       .then(function () {
-        return podBillingService.issueInvoice(Object.assign(issueInvoiceBody, { _ott_: ott }));
+        return podBillingService.issueInvoice(Object.assign(issueInvoiceBody, { ott: ott }));
       })
       .then(function (result) {
         invoiceId = result.result.id;
@@ -508,16 +511,16 @@ describe('API: closeInvoice ', function () {
   });
 });
 
-// #14
+// #13
 describe('API: getInvoicePaymentLink ', function () {
   this.timeout(10000);
   before('issueInvoice', function (done) {
-    podBillingService.getOtt({})
+    podCommon.getOtt({})
       .then(function (result) {
         ott = result.ott;
       })
       .then(function () {
-        return podBillingService.issueInvoice(Object.assign(issueInvoiceBody, { _ott_: ott }));
+        return podBillingService.issueInvoice(Object.assign(issueInvoiceBody, { ott: ott }));
       })
       .then(function (result) {
         invoiceId = result.result.id;
@@ -543,7 +546,7 @@ describe('API: getInvoicePaymentLink ', function () {
   });
 });
 
-// #15 -> Needs Scenario
+// #14 -> Needs Scenario
 describe('API: payInvoiceByInvoice ', function () {
   this.timeout(10000);
   it('correct request', function (done) {
@@ -561,7 +564,7 @@ describe('API: payInvoiceByInvoice ', function () {
   });
 });
 
-// #16 -> Needs Scenario
+// #15 -> Needs Scenario
 describe('API: payInvoiceInFuture ', function () {
   this.timeout(10000);
   it('correct request', function (done) {
@@ -579,7 +582,7 @@ describe('API: payInvoiceInFuture ', function () {
   });
 });
 
-// #17
+// #16
 describe('API: getExportList ', function () {
   this.timeout(10000);
   it('correct request', function (done) {
@@ -597,11 +600,41 @@ describe('API: getExportList ', function () {
   });
 });
 
-// #18
+// #17
 describe('API: requestWalletSettlement ', function () {
   this.timeout(10000);
   before('getOtt', function (done) {
-    podBillingService.getOtt({})
+    podCommon.getOtt({})
+      .then(function (result) {
+        console.log();
+        ott = result.ott;
+        done();
+      })
+      .catch(function (error) {
+        console.log(error);
+        done(new Error());
+      });
+  });
+  it('correct request', function (done) {
+    podBillingService.requestWalletSettlement(Object.assign({ amount: amount }, { ott: ott }))
+      .then(function (result) {
+        console.log(result);
+        expect(result).to.have.property('hasError', false);
+        expect(result).to.have.property('result');
+        done();
+      })
+      .catch(function (error) {
+        console.log(error);
+        done(new Error());
+      });
+  });
+});
+
+// #18
+describe('API: requestGuildSettlement ', function () {
+  this.timeout(10000);
+  before('getOtt', function (done) {
+    podCommon.getOtt({})
       .then(function (result) {
         ott = result.ott;
         done();
@@ -612,7 +645,7 @@ describe('API: requestWalletSettlement ', function () {
       });
   });
   it('correct request', function (done) {
-    podBillingService.requestWalletSettlement(Object.assign({ amount: amount }, { _ott_: ott }))
+    podBillingService.requestGuildSettlement(Object.assign({ amount: amount, guildCode: guildCode }, { ott: ott }))
       .then(function (result) {
         console.log(result);
         expect(result).to.have.property('hasError', false);
@@ -627,39 +660,10 @@ describe('API: requestWalletSettlement ', function () {
 });
 
 // #19
-describe('API: requestGuildSettlement ', function () {
-  this.timeout(10000);
-  before('getOtt', function (done) {
-    podBillingService.getOtt({})
-      .then(function (result) {
-        ott = result.ott;
-        done();
-      })
-      .catch(function () {
-        // console.log(error);
-        done(new Error());
-      });
-  });
-  it('correct request', function (done) {
-    podBillingService.requestGuildSettlement(Object.assign({ amount: amount, guildCode: guildCode }, { _ott_: ott }))
-      .then(function (result) {
-        console.log(result);
-        expect(result).to.have.property('hasError', false);
-        expect(result).to.have.property('result');
-        done();
-      })
-      .catch(function (error) {
-        console.log(error);
-        done(new Error());
-      });
-  });
-});
-
-// #20
 describe('API: requestSettlementByTool ', function () {
   this.timeout(10000);
   before('getOtt', function (done) {
-    podBillingService.getOtt({})
+    podCommon.getOtt({})
       .then(function (result) {
         ott = result.ott;
         done();
@@ -675,7 +679,7 @@ describe('API: requestSettlementByTool ', function () {
       guildCode: guildCode,
       toolCode: toolCode,
       toolId: toolId
-    }, { _ott_: ott }))
+    }, { ott: ott }))
       .then(function (result) {
         console.log(result);
         expect(result).to.have.property('hasError', false);
@@ -689,7 +693,7 @@ describe('API: requestSettlementByTool ', function () {
   });
 });
 
-// #21
+// #20
 describe('API: listSettlements ', function () {
   this.timeout(10000);
   it('correct request', function (done) {
@@ -707,7 +711,7 @@ describe('API: listSettlements ', function () {
   });
 });
 
-// #22
+// #21
 describe('API: addAutoSettlement ', function () {
   this.timeout(10000);
   it('correct request', function (done) {
@@ -725,7 +729,7 @@ describe('API: addAutoSettlement ', function () {
   });
 });
 
-// #23
+// #22
 describe('API: removeAutoSettlement ', function () {
   this.timeout(10000);
   it('correct request', function (done) {
@@ -743,23 +747,23 @@ describe('API: removeAutoSettlement ', function () {
   });
 });
 
-// #24
+// #23
 describe('API: getPayInvoiceByWalletLink ', function () {
   this.timeout(10000);
   before('issueInvoice', function (done) {
-    podBillingService.getOtt({})
+    podCommon.getOtt({})
       .then(function (result) {
         ott = result.ott;
       })
       .then(function () {
-        return podBillingService.issueInvoice(Object.assign(issueInvoiceBody, { _ott_: ott }));
+        return podBillingService.issueInvoice(Object.assign(issueInvoiceBody, { ott: ott }));
       })
       .then(function (result) {
         invoiceId = result.result.id;
         done();
       })
-      .catch(function () {
-        // console.log(error);
+      .catch(function (error) {
+        console.log(error);
         done(new Error());
       });
   });
@@ -773,16 +777,16 @@ describe('API: getPayInvoiceByWalletLink ', function () {
   });
 });
 
-// #25
+// #24
 describe('API: getPayInvoiceByUniqueNumberLink ', function () {
   this.timeout(10000);
   before('issueInvoice', function (done) {
-    podBillingService.getOtt({})
+    podCommon.getOtt({})
       .then(function (result) {
         ott = result.ott;
       })
       .then(function () {
-        return podBillingService.issueInvoice(Object.assign(issueInvoiceBody, { _ott_: ott }));
+        return podBillingService.issueInvoice(Object.assign(issueInvoiceBody, { ott: ott }));
       })
       .then(function (result) {
         uniqueNumber = result.result.uniqueNumber;
@@ -800,122 +804,15 @@ describe('API: getPayInvoiceByUniqueNumberLink ', function () {
       callUri: callUri,
       gateway: gateway
     }));
+    done();
   });
 });
 
-// #26
-describe('API: guildList ', function () {
-  this.timeout(10000);
-  it('correct request', function (done) {
-    podBillingService.guildList({ size: 2 })
-      .then(function (result) {
-        console.log(result);
-        expect(result).to.have.property('hasError', false);
-        expect(result).to.have.property('result');
-        done();
-      })
-      .catch(function (error) {
-        console.log(error);
-        done(new Error());
-      });
-  });
-});
-
-// #27
-describe('API: addDealer ', function () {
-  this.timeout(10000);
-  it('correct request', function (done) {
-    podBillingService.addDealer({ dealerBizId: otherBizId })
-      .then(function (result) {
-        console.log(result);
-        expect(result).to.have.property('hasError', false);
-        expect(result).to.have.property('result');
-        done();
-      })
-      .catch(function (error) {
-        console.log(error);
-        done(new Error());
-      });
-  });
-});
-
-// #28
-describe('API: dealerList ', function () {
-  this.timeout(10000);
-  it('correct request', function (done) {
-    podBillingService.dealerList({})
-      .then(function (result) {
-        console.log(JSON.stringify(result, null, 2));
-        expect(result).to.have.property('hasError', false);
-        expect(result).to.have.property('result');
-        done();
-      })
-      .catch(function (error) {
-        console.log(error);
-        done(new Error());
-      });
-  });
-});
-
-// #29
-describe('API: enableDealer ', function () {
-  this.timeout(10000);
-  it('correct request', function (done) {
-    podBillingService.enableDealer({ dealerBizId: otherBizId })
-      .then(function (result) {
-        console.log(JSON.stringify(result, null, 2));
-        expect(result).to.have.property('hasError', false);
-        expect(result).to.have.property('result');
-        done();
-      })
-      .catch(function (error) {
-        console.log(error);
-        done(new Error());
-      });
-  });
-});
-
-// #30
-describe('API: disableDealer ', function () {
-  this.timeout(10000);
-  it('correct request', function (done) {
-    podBillingService.disableDealer({ dealerBizId: otherBizId })
-      .then(function (result) {
-        console.log(JSON.stringify(result, null, 2));
-        expect(result).to.have.property('hasError', false);
-        expect(result).to.have.property('result');
-        done();
-      })
-      .catch(function (error) {
-        console.log(error);
-        done(new Error());
-      });
-  });
-});
-
-// #31
-describe('API: businessDealingList ', function () {
-  this.timeout(10000);
-  it('correct request', function (done) {
-    podBillingService.businessDealingList({})
-      .then(function (result) {
-        console.log(JSON.stringify(result, null, 2));
-        expect(result).to.have.property('hasError', false);
-        expect(result).to.have.property('result');
-        done();
-      })
-      .catch(function (error) {
-        console.log(error);
-        done(new Error());
-      });
-  });
-});
-
-// #32
+// #25
 describe('API: issueMultiInvoice ', function () {
   this.timeout(10000);
   before('getOtt', function (done) {
-    podBillingService.getOtt({})
+    podCommon.getOtt({})
       .then(function (result) {
         ott = result.ott;
         done();
@@ -926,7 +823,7 @@ describe('API: issueMultiInvoice ', function () {
       });
   });
   it('correct request', function (done) {
-    podBillingService.issueMultiInvoice(Object.assign(issueMultiInvoiceData, { _ott_: ott }))
+    podBillingService.issueMultiInvoice(Object.assign(issueMultiInvoiceData, { ott: ott }))
       .then(function (result) {
         console.log(JSON.stringify(result, null, 2));
         expect(result).to.have.property('hasError', false);
@@ -940,14 +837,14 @@ describe('API: issueMultiInvoice ', function () {
   });
 });
 
-// #33
-describe.only('API: reduceMultiInvoice ', function () {
+// #26
+describe('API: reduceMultiInvoice ', function () {
   this.timeout(10000);
   before('issueMultiInvoice', function (done) {
-    podBillingService.getOtt({})
+    podCommon.getOtt({})
       .then(function (result) {
         ott = result.ott;
-        return podBillingService.issueMultiInvoice(Object.assign(issueMultiInvoiceData, { _ott_: ott }));
+        return podBillingService.issueMultiInvoice(Object.assign(issueMultiInvoiceData, { ott: ott }));
       })
       .then(function (result) {
         reduceMultiInvoiceData.data.mainInvoice.id = result.result.id;
@@ -977,7 +874,7 @@ describe.only('API: reduceMultiInvoice ', function () {
   });
 });
 
-// #34
+// #27
 describe('API: reduceMultiInvoiceAndCashOut ', function () {
   this.timeout(10000);
   it('correct request', function (done) {
@@ -995,11 +892,39 @@ describe('API: reduceMultiInvoiceAndCashOut ', function () {
   });
 });
 
-// #35
-describe('API: addDealerProductPermission ', function () {
-  this.timeout(10000);
+// --------------------------------------------- Voucher ---------------------------------------------
+// #28
+describe('Method: defineCreditVoucher', function () {
+  this.timeout(100000);
+  let defineCreditVoucherData = {
+    // ------ REQUIRED ------
+    guildCode: guildCode,
+    expireDate: '1398/11/12',
+    vouchers: [
+      {
+        // ------ REQUIRED ------
+        count: 1,
+        amount: 1,
+        name: 'voucher#1',
+        description: 'This is the first voucher'
+
+        // ------ OPTIONAL ------
+        // hash: 'hash#1'
+      },
+      {
+        count: 1,
+        amount: 2,
+        name: 'voucher#2',
+        description: 'This is the second voucher'
+      }
+    ]
+
+    // ------ OPTIONAL ------
+    // limitedConsumerId: ''
+    // currencyCode: ''
+  };
   it('correct request', function (done) {
-    podBillingService.addDealerProductPermission({ dealerBizId: otherBizId, productId: productId })
+    podBillingService.defineCreditVoucher(defineCreditVoucherData)
       .then(function (result) {
         console.log(JSON.stringify(result, null, 2));
         expect(result).to.have.property('hasError', false);
@@ -1013,11 +938,269 @@ describe('API: addDealerProductPermission ', function () {
   });
 });
 
-// #36
-describe('API: dealerProductPermissionList ', function () {
-  this.timeout(10000);
+// #29
+describe('Method: defineDiscountAmountVoucher', function () {
+  this.timeout(100000);
+  let defineDiscountAmountVoucherData = {
+    // ------ REQUIRED ------
+    guildCode: guildCode,
+    expireDate: '1398/11/12',
+    vouchers: [
+      {
+        // ------ REQUIRED ------
+        count: 1,
+        amount: 1,
+        name: 'voucher#1',
+        description: 'This is the first voucher'
+
+        // ------ OPTIONAL ------
+        // hash: 'hash#1'
+      },
+      {
+        count: 1,
+        amount: 1,
+        name: 'voucher#2',
+        description: 'This is the second voucher'
+      }
+    ]
+
+    // ------ OPTIONAL ------
+    // productId: ''
+    // dealerBusinessId: ''
+    // limitedConsumerId: ''
+    // currencyCode: ''
+  };
   it('correct request', function (done) {
-    podBillingService.dealerProductPermissionList({})
+    podBillingService.defineDiscountAmountVoucher(defineDiscountAmountVoucherData)
+      .then(function (result) {
+        console.log(JSON.stringify(result, null, 2));
+        expect(result).to.have.property('hasError', false);
+        expect(result).to.have.property('result');
+        done();
+      })
+      .catch(function (error) {
+        console.log(error);
+        done(new Error());
+      });
+  });
+});
+
+// #30
+describe('Method: defineDiscountPercentageVoucher', function () {
+  this.timeout(100000);
+  let defineDiscountPercentageVoucherData = {
+    // ------ REQUIRED ------
+    guildCode: guildCode,
+    expireDate: '1398/11/12',
+    vouchers: [
+      {
+        // ------ REQUIRED ------
+        count: 1,
+        amount: 1,
+        name: 'voucher#125',
+        discountPercentage: 22,
+        description: 'This is the first voucher'
+
+        // ------ OPTIONAL ------
+        // hash: 'hash#1158'
+      },
+      {
+        count: 1,
+        amount: 1,
+        name: 'voucher#258',
+        discountPercentage: 22.5,
+        description: 'This is the second voucher'
+      }
+    ],
+    type: 8
+
+    // ------ OPTIONAL ------
+    // productId: ''
+    // dealerBusinessId: ''
+    // limitedConsumerId: ''
+    // currencyCode: ''
+  };
+
+  it('correct request', function (done) {
+    podBillingService.defineDiscountPercentageVoucher(defineDiscountPercentageVoucherData)
+      .then(function (result) {
+        console.log(JSON.stringify(result, null, 2));
+        expect(result).to.have.property('hasError', false);
+        expect(result).to.have.property('result');
+        done();
+      })
+      .catch(function (error) {
+        console.log(error);
+        done(new Error());
+      });
+  });
+});
+
+// #31
+describe('Method: applyVoucher', function () {
+  this.timeout(100000);
+  let applyVoucherData = {
+    // ------ REQUIRED ------
+    // ott: '124',
+    invoiceId: 5703466,
+    voucherHash: ['voucher#1'],
+    ott: '4444'
+
+    // ------ OPTIONAL ------
+    // preview: true | false,
+  };
+  it('correct request', function (done) {
+    podBillingService.applyVoucher(applyVoucherData)
+      .then(function (result) {
+        console.log(JSON.stringify(result, null, 2));
+        expect(result).to.have.property('hasError', false);
+        expect(result).to.have.property('result');
+        done();
+      })
+      .catch(function (error) {
+        console.log(error);
+        done(new Error());
+      });
+  });
+});
+
+// #32
+describe('Method: getVoucherList', function () {
+  this.timeout(100000);
+  let getVoucherListData = {
+    // ------ REQUIRED ------
+    offset: 0,
+
+    // ------ OPTIONAL ------
+    size: 2
+    // consumerId: ''
+    // hash: ''
+    // name: ''
+    // type: ''
+    // guildCode: ''
+    // currencyCode: ''
+    // amountFrom: ''
+    // amountTo: ''
+    // discountPercentageFrom: ''
+    // discountPercentageTo: ''
+    // expireDateFrom: ''
+    // expireDateTo: ''
+    // productId: ''
+    // consumDateFrom: ''
+    // consumDateTo: ''
+    // usedAmountFrom: ''
+    // usedAmountTo: ''
+    // active: ''
+    // used: ''
+  };
+  it('correct request', function (done) {
+    podBillingService.getVoucherList(getVoucherListData)
+      .then(function (result) {
+        console.log(JSON.stringify(result, null, 2));
+        expect(result).to.have.property('hasError', false);
+        expect(result).to.have.property('result');
+        done();
+      })
+      .catch(function (error) {
+        console.log(error);
+        done(new Error());
+      });
+  });
+});
+
+// #33
+describe('Method: deactivateVoucher', function () {
+  this.timeout(100000);
+  let deactivateVoucherData = {
+    // ------ REQUIRED ------
+    id: 261707
+
+    // ------ OPTIONAL ------
+  };
+  it('correct request', function (done) {
+    podBillingService.deactivateVoucher(deactivateVoucherData)
+      .then(function (result) {
+        console.log(JSON.stringify(result, null, 2));
+        expect(result).to.have.property('hasError', false);
+        expect(result).to.have.property('result');
+        done();
+      })
+      .catch(function (error) {
+        console.log(error);
+        done(new Error());
+      });
+  });
+});
+
+// #34
+describe('Method: activateVoucher', function () {
+  this.timeout(10000);
+  let activateVoucherData = {
+    // ------ REQUIRED ------
+    id: 261707
+
+    // ------ OPTIONAL ------
+  };
+  it('correct request', function (done) {
+    podBillingService.activateVoucher(activateVoucherData)
+      .then(function (result) {
+        console.log(JSON.stringify(result, null, 2));
+        expect(result).to.have.property('hasError', false);
+        expect(result).to.have.property('result');
+        done();
+      })
+      .catch(function (error) {
+        console.log(error);
+        done(new Error());
+      });
+  });
+});
+
+// --------------------------------------------- Direct Debate ---------------------------------------------
+// #35
+describe('Method: defineDirectWithdraw', function () {
+  this.timeout(10000);
+  let defineDirectWithdrawData = {
+    // ------ REQUIRED ------
+    username: '13898506',
+    // privateKey: privateKey,
+    privateKeyAddress: './test/key.xml',
+    depositNumber: '1006115138985061',
+    onDemand: false,
+    minAmount: 100000,
+    maxAmount: 200000,
+    wallet: 'PODLAND_WALLET'
+    // ------ OPTIONAL ------
+  };
+
+  it('correct request', function (done) {
+    podBillingService.defineDirectWithdraw(defineDirectWithdrawData)
+      .then(function (result) {
+        console.log(JSON.stringify(result, null, 2));
+        expect(result).to.have.property('hasError', false);
+        expect(result).to.have.property('result');
+        done();
+      })
+      .catch(function (error) {
+        console.log(JSON.stringify(error, null, 2));
+        done(new Error());
+      });
+  });
+});
+
+// #36
+describe('Method: directWithdrawList', function () {
+  this.timeout(10000);
+  let directWithdrawListData = {
+    // ------ REQUIRED ------
+    // wallet: 'PODLAND_WALLET',
+    offset: 0,
+    size: 1
+
+    // ------ OPTIONAL ------
+  };
+  it('correct request', function (done) {
+    podBillingService.directWithdrawList(directWithdrawListData)
       .then(function (result) {
         console.log(JSON.stringify(result, null, 2));
         expect(result).to.have.property('hasError', false);
@@ -1032,10 +1215,22 @@ describe('API: dealerProductPermissionList ', function () {
 });
 
 // #37
-describe('API: dealingProductPermissionList ', function () {
+describe('Method: updateDirectWithdraw', function () {
   this.timeout(10000);
+  let updateDirectWithdrawData = {
+    // ------ REQUIRED ------
+    id: 121,
+    username: '13898506',
+    privateKey: privateKey,
+    depositNumber: '1006115138985061',
+    onDemand: true,
+    minAmount: 10,
+    maxAmount: 20,
+    wallet: 'PODLAND_WALLET'
+    // ------ OPTIONAL ------
+  };
   it('correct request', function (done) {
-    podBillingService.dealingProductPermissionList({})
+    podBillingService.updateDirectWithdraw(updateDirectWithdrawData)
       .then(function (result) {
         console.log(JSON.stringify(result, null, 2));
         expect(result).to.have.property('hasError', false);
@@ -1050,10 +1245,16 @@ describe('API: dealingProductPermissionList ', function () {
 });
 
 // #38
-describe('API: disableDealerProductPermission ', function () {
+describe('Method: revokeDirectWithdraw', function () {
   this.timeout(10000);
+  let revokeDirectWithdrawData = {
+    // ------ REQUIRED ------
+    id: 121
+
+    // ------ OPTIONAL ------
+  };
   it('correct request', function (done) {
-    podBillingService.disableDealerProductPermission({ dealerBizId: otherBizId, productId: productId })
+    podBillingService.revokeDirectWithdraw(revokeDirectWithdrawData)
       .then(function (result) {
         console.log(JSON.stringify(result, null, 2));
         expect(result).to.have.property('hasError', false);
@@ -1067,11 +1268,53 @@ describe('API: disableDealerProductPermission ', function () {
   });
 });
 
+// --------------------------------------------- RECENTLY ADDED ---------------------------------------------
+
 // #39
-describe('API: enableDealerProductPermission ', function () {
+describe('Method: payInvoiceByCredit', function () {
   this.timeout(10000);
+  let payInvoiceByCreditData = {
+    // ------ REQUIRED ------
+    invoiceId: 6723179,
+    ott: '6a11112d0da2dcf1'
+
+    // ------ OPTIONAL ------
+    // delegatorId: [0, 0]
+    // delegationHash: ['HASH#1', 'HASH#2']
+    // forceDelegation: true | false
+    // wallet: 'WALLET'
+  };
   it('correct request', function (done) {
-    podBillingService.enableDealerProductPermission({ dealerBizId: otherBizId, productId: productId })
+    podBillingService.payInvoiceByCredit(payInvoiceByCreditData)
+      .then(function (result) {
+        console.log(JSON.stringify(result, null, 2));
+        expect(result).to.have.property('hasError', false);
+        expect(result).to.have.property('result');
+        done();
+      })
+      .catch(function (error) {
+        console.log(error);
+        done(new Error());
+      });
+  });
+});
+
+// #40
+describe('Method: payAnyInvoiceByCredit', function () {
+  this.timeout(10000);
+  let payAnyInvoiceByCreditData = {
+    // ------ REQUIRED ------
+    invoiceId: 6699284,
+    ott: 'da558bd914dd61ef',
+    wallet: 'PODLAND_WALLET'
+
+    // ------ OPTIONAL ------
+    // delegatorId: [0, 0]
+    // delegationHash: ['HASH#1', 'HASH#2']
+    // forceDelegation: true | false
+  };
+  it('correct request', function (done) {
+    podBillingService.payAnyInvoiceByCredit(payAnyInvoiceByCreditData)
       .then(function (result) {
         console.log(JSON.stringify(result, null, 2));
         expect(result).to.have.property('hasError', false);
